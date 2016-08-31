@@ -1,0 +1,20 @@
+{
+    "name": "esemve/composerve",
+    "description": "Convert git repository to composer package",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "smv",
+            "email": "esemve@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Esemve\\Composerve\\Cli\\": "cli/",
+            "Esemve\\Composerve\\Http\\": "http/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {}
+}

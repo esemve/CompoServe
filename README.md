@@ -12,7 +12,10 @@ With the CLI php exec it should be able to start the git command. Besides that i
 
 **Installation**
 
-1. Clone the project
+1. Clone the project or install from composer
+```bash
+composer require esemve/composerve --prefer-dist
+```
 2. Make available the content of the public folder online
 3. Transfer all queries that are arrive to public to index.php (this way it can serve the packages.json request as well)
 

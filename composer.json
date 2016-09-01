@@ -1,11 +1,11 @@
 {
     "name": "esemve/composerve",
-    "description": "Convert git repository to composer package",
+    "description": "Convert git repositories to composer packages",
     "type": "project",
     "license": "MIT",
     "authors": [
         {
-            "name": "smv",
+            "name": "esemve",
             "email": "esemve@gmail.com"
         }
     ],

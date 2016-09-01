@@ -12,7 +12,7 @@ class Packages
         $this->fileManager = new FileManager();
         $this->repositories = require realpath(__DIR__.'/../config/repositories.php');
 
-        $json = $this->buildPackageJson();
+        $this->buildPackageJson();
     }
 
     protected function buildPackageJson()

@@ -25,7 +25,5 @@ class Commander
             default:
                 return new Help($pass);
         }
-
-
     }
 }

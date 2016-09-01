@@ -19,9 +19,6 @@ class Download
 
 				fpassthru($fp);			
 				die();
-			
 		}
-	
 	}
-
 }

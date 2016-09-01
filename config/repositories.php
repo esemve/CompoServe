@@ -9,6 +9,4 @@ return [
      * 'your/package' => '/srv/repos/test/',
      */
 
-    'esemve/hook' => '/srv/www/modul1/',
-
 ];

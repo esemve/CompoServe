@@ -13,7 +13,6 @@ class Packages
         $this->repositories = require realpath(__DIR__.'/../config/repositories.php');
 
         $json = $this->buildPackageJson();
-        //var_dump($this->repositories);
     }
 
     protected function buildPackageJson()
@@ -25,12 +24,13 @@ class Packages
           $path = $this->fileManager->getArrayFromCachedJson(md5($package));
           $packages[$package] = $path;
         }
+		
+		$output = [];
+		$output['packages'] = $packages;
 
-        $packages['packages'] = $packages;
+        $url = 'http:\/\/'.$_SERVER['HTTP_HOST'];
 
-        $url = (empty($_SERVER['HTTPS'])?'http:\/\/':'https:\/\/').$_SERVER['HTTP_HOST'];
-
-        $json = json_encode($packages);
+        $json = json_encode($output);
         echo str_replace('#SITEURL#',$url,$json);
 
     }

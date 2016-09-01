@@ -1,6 +1,6 @@
 {
     "name": "esemve/composerve",
-    "description": "Convert git repositories to composer packages",
+    "description": "Server your git repositories as composer packages",
     "type": "project",
     "license": "MIT",
     "authors": [

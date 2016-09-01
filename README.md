@@ -17,7 +17,7 @@ With the CLI php exec it should be able to start the git command. Besides that i
 composer require esemve/composerve --prefer-dist
 ```
 2. Make available the content of the public folder online
-3. Transfer all queries that are arrive to public to index.php (this way it can serve the packages.json request as well)
+3. Transfer all request to index.php (this way it can serve the packages.json request as well)
 
 **Settings**
 

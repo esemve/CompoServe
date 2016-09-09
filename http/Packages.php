@@ -11,11 +11,9 @@ class Packages
     {
         $this->fileManager = new FileManager();
         $this->repositories = require realpath(__DIR__.'/../config/repositories.php');
-
-        $this->buildPackageJson();
     }
 
-    protected function buildPackageJson()
+    public function buildPackageJson()
     {
         $packages = [];
 
@@ -25,14 +23,13 @@ class Packages
           $packages[$package] = $path;
         }
 		
-		$output = [];
-		$output['packages'] = $packages;
+	$output = [];
+	$output['packages'] = $packages;
 
         $url = 'http:\/\/'.$_SERVER['HTTP_HOST'];
 
         $json = json_encode($output);
-        echo str_replace('#SITEURL#',$url,$json);
-
+        return str_replace('#SITEURL#',$url,$json);
     }
 
 }

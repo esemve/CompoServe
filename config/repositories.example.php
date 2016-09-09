@@ -4,9 +4,26 @@
  */
 
 return [
+
+
     /*
-     * Example
-     * 'your/package' => '/srv/repos/test/',
-     */
+     * #######################################
+     * Example:
+     * #######################################
+     *
+     * 'esemve/Hook' => [
+     *    'path' => '/srv/git/Hook/',
+     *    'useGitPull' => true
+     * ],
+     * 'esemve/VanillaCache' => [
+     *    'path' => '/srv/git/VanillaCache/',
+     *    'useGitPull' => false
+     * ],
+     * 'esemve/CompoServe' => [
+     *    'remote' => 'https://github.com/esemve/CompoServe',
+     *    'useGitPull' => true
+     * ]
+     *
+     * ######################################
 
 ];

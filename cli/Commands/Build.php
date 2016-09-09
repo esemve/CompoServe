@@ -17,15 +17,29 @@ class Build extends Terminal
         {
             $this->parseRepositories();
         }
+	else
+	{
+	    $this->parseOneRepository($parameters[0]);
+	}
     }
 
     public function parseRepositories()
     {
         if (!empty($this->repositories)) {
-            foreach ($this->repositories as $package => $path) {
+            foreach ($this->repositories as $package => $parameters) {
                 $this->parseRepository($package);
             }
         }
+    }
+
+    public function parseOneRepository($packageName)
+    {
+	if (!$this->foundInRepositoryarray($packageName))
+	{
+	    echo $packageName.' package not found!';
+	}
+
+	$this->parseRepository($packageName);
     }
 
     public function parseRepository($package)
@@ -36,11 +50,19 @@ class Build extends Terminal
             return;
         }
 
+
         $path = $this->getRepositoryPath($package);
         if (empty($path))
         {
             return;
         }
+
+	$info = $this->getRepositoryInfos($package);
+    
+	if (!empty($info['useGitPull']))
+	{
+	    $this->useGitPull($path);
+	}
 
         $tags = $this->parseGitTags($package,$path);
 		
@@ -52,6 +74,11 @@ class Build extends Terminal
 
         $this->generateCacheJsonFile($package,$tags,__DIR__.'/../../storage/jsons/'.md5($package).'.json');
 		$this->generateZipFiles($package,$tags);
+    }
+
+    protected function getRepositoryInfos($package)
+    {
+	return $this->repositories[$package];
     }
 
     protected function foundInRepositoryArray($package)
@@ -66,7 +93,17 @@ class Build extends Terminal
 
     protected function getRepositoryPath($package)
     {
-        $path = rtrim($this->repositories[$package],'/');
+
+	if (empty($this->repositories[$package]['path']))
+	{
+	    if (!empty($this->repositories[$package]['remote']))
+	    {
+		$this->repositories[$package]['path'] = $this->getRemoteRepositoryPath($package);
+		$this->repositories[$package]['useGitPull'] = true;
+	    }
+	}
+
+        $path = rtrim($this->repositories[$package]['path'],'/');
 
         if (!file_exists($path.'/.git'))
         {
@@ -77,11 +114,18 @@ class Build extends Terminal
         return $path;
     }
 
+    protected function useGitPull($path)
+    {
+	chdir($path);
+	$this->exec('git pull origin master --tags');
+    }
+
     protected function parseGitTags($package,$path)
     {
         $output = [];
-		chdir($path);
-		$packageHash = md5($package);
+	chdir($path);
+	$packageHash = md5($package);
+
         $tagrows = $this->exec('git show-ref --tags');
         foreach ($tagrows AS $row)
         {
@@ -93,7 +137,7 @@ class Build extends Terminal
 
                 $this->println('Founded ('.$package.'): '.$commit. " - ".$tag);
                 $output[$tag] = $commit;
-				$this->infos[$packageHash][$commit] = $this->getComposerData($commit);
+		$this->infos[$packageHash][$commit] = $this->getComposerData($commit);
 				
             }
         }
@@ -102,9 +146,7 @@ class Build extends Terminal
 
     public function generateCacheJsonFile($package,$tags,$file)
     {
-        $save = [];
-
-		
+        $save = [];	
 		
         foreach ($tags AS $tag => $commit)
         {
@@ -154,7 +196,7 @@ class Build extends Terminal
 	{
 		$folder = __DIR__.'/../../storage/zips/'.md5($package);
 		
-		if (!file_exists(__DIR__.'/../../storage/zips/'.$package))
+		if (!file_exists($folder))
 		{
 			mkdir($folder);
 		}
@@ -181,5 +223,33 @@ class Build extends Terminal
 		}
 		return $datas;
 	
+	}
+
+	protected function getRemoteRepositoryPath($package)
+	{
+	    if (!empty($this->repositories[$package]['remote']))
+	    {
+		$remote = $this->repositories[$package]['remote'];
+
+		$localFolder = __DIR__.'/../../storage/repos/'.md5($remote);
+		if (file_exists($localFolder))
+		{
+		    return $localFolder;
+		}
+		else
+		{
+		    mkdir($localFolder);
+		    if (!file_exists($localFolder))
+		    {
+			die($localFolder.' not found!');
+		    }
+
+		    chdir($localFolder);
+		    $this->exec('git init .');
+		    $this->exec('git remote add origin '.$remote);
+		    $this->exec('git pull origin master --tags');
+		    return $localFolder;
+		}
+	    }
 	}
 }

@@ -12,4 +12,15 @@ if ($_SERVER['REQUEST_URI']=='/packages.json')
     die();
 }
 
+$uris = explode('/',$_SERVER['REQUEST_URI']);
+if (!empty($uris[1]))
+{
+    if ($uris[1]=='download')
+    {
+	new Esemve\Composerve\Http\Download($uris);
+    }
+}
+
+
+
 new Esemve\Composerve\Http\Index();
